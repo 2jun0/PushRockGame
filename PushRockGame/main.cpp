@@ -1,6 +1,5 @@
 #include <glut.h>
-#include <vector>
-#include "ent.h"
+#include <vector>s
 #include "game.h"
 
 using namespace std;
@@ -8,36 +7,19 @@ using namespace std;
 int windowW = 500;
 int windowH = 500;
 
-void drawEntity(Ent ent) {
-	// draw Entity
-	switch (ent.type)
-	{
-	case WALL:
-		break;
-	case ROCK:
-		break;
-	case PLAYER:
-		break;
-	case BUTTON:
-		break;
-	case DOOR:
-		break;
-	default:
-		break;
-	}
-}
+Game* game;
 
 void myDisplay() {
 	glClearColor(1.0, 1.0, 1.0, 1.0); // 초기화 색깔은 하얀색
 	glClear(GL_COLOR_BUFFER_BIT); // 색깔 버퍼 사용
 
-	// 엔티티 들을 그림
-	for (int i = 0; i < entities.size(); i++) {
-		drawEntity(entities[i]);
-	}
+	glMatrixMode(GL_MODELVIEW);
+	game->drawEntities();
 }
 
 void init() {
+	game = new Game();
+	
 	glutInitDisplayMode(GLUT_RGB);
 	glutInitWindowSize(windowW, windowH);
 	glutInitWindowPosition(0, 0);

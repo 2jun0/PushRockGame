@@ -2,7 +2,7 @@
 
 const Aabb Wall::WALL_AABB = Aabb(-0.5, 0.5, -0.5, 0.5);
 
-Wall::Wall(Pos& pos): Ent(WALL_AABB, pos, EntType::WALL){
+Wall::Wall(const Pos& pos): Ent(WALL_AABB, pos, EntType::WALL){
 
 }
 

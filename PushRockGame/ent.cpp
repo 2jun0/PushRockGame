@@ -29,7 +29,7 @@ Pos::Pos(float x, float y, float z) {
 /*
 	Ent start
 */
-Ent::Ent(Aabb &aabb, Pos &pos, EntType &type)
+Ent::Ent(const Aabb &aabb, const Pos &pos, const EntType &type)
 	: aabb(aabb), pos(pos), type(type) {
 }
 

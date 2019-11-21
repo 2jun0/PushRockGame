@@ -35,7 +35,7 @@ protected:
 	Pos pos;
 	EntType type;
 public:
-	Ent(Aabb& aabb, Pos& pos, EntType& type);
+	Ent(const Aabb& aabb, const Pos& pos, const EntType& type);
 	
 	virtual Aabb& getAabb();
 	virtual Pos& getPos();

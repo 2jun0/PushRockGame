@@ -5,7 +5,7 @@ class Wall : public Ent {
 public:
 	static const Aabb WALL_AABB;
 public:
-	Wall(Pos& pos);
+	Wall(const Pos& pos);
 
 	virtual void draw();
 };

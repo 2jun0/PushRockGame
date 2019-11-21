@@ -15,19 +15,19 @@ void Game::loadStage(int stageIdx) {
 
 	EntBuilder builder = EntBuilder();
 
-	int y = 0, x = 0;
+	int z = 0, x = 0;
 	while (token != NULL) {
 		if(strcmp(token, "\n") == 0) {
-			y++;
+			z++;
 			x = 0;
 			continue;
 		}
 
 		EntType entType = (EntType)atoi(token); // 엔티티 타입 구함(형변환)
 		// 엔티티가 있으면 (NONE이면 그냥 빈공간)
-		if (entType != EntType::NONE) {
+		if (entType != EntType::NONE) { 
 			// 엔티티 생성
-			Pos pos = Pos((float)x, (float)y);	// 엔티티 좌표
+			Pos pos = Pos((float)x, 0, (float)z);	// 엔티티 좌표
 			builder.createEntity(entType, pos); // 엔티티 생성
 
 			Ent* ent = builder.getEntity(); // 생성된 엔티티 get

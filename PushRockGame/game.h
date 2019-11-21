@@ -8,6 +8,6 @@ private:
 	vector<Ent*> entities;
 public:
 	Game();
-	void loadStage(int stageIdx);
+	void loadStage(const int& stageIdx);
 	void drawEntities();
 };

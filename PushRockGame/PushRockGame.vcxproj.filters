@@ -45,7 +45,7 @@
     <ClCompile Include="stage.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="ent_builder.cpp">
+    <ClCompile Include="ent_factory.cpp">
       <Filter>소스 파일\entity</Filter>
     </ClCompile>
   </ItemGroup>
@@ -71,7 +71,7 @@
     <ClInclude Include="button.h">
       <Filter>헤더 파일\entity</Filter>
     </ClInclude>
-    <ClInclude Include="ent_builder.h">
+    <ClInclude Include="ent_factory.h">
       <Filter>헤더 파일\entity</Filter>
     </ClInclude>
   </ItemGroup>

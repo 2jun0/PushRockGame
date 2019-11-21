@@ -1,6 +1,6 @@
-#include "ent_builder.h"
+#include "ent_factory.h"
 
-void EntBuilder::createEntity(EntType& type, Pos& pos) {
+void EntFactory::createEntity(const EntType& type, const Pos& pos) {
 	switch (type)
 	{
 	case EntType::WALL:
@@ -20,6 +20,6 @@ void EntBuilder::createEntity(EntType& type, Pos& pos) {
 	}
 }
 
-Ent* EntBuilder::getEntity() {
+Ent* EntFactory::getEntity() {
 	return ent;
 }

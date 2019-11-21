@@ -124,7 +124,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="button.cpp" />
-    <ClCompile Include="ent_builder.cpp" />
+    <ClCompile Include="ent_factory.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ent.cpp" />
@@ -135,7 +135,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="button.h" />
-    <ClInclude Include="ent_builder.h" />
+    <ClInclude Include="ent_factory.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="rock.h" />
     <ClInclude Include="wall.h" />

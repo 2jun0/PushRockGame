@@ -6,10 +6,10 @@
 #include "player.h"
 #include "button.h"
 
-class EntBuilder {
+class EntFactory {
 protected:
 	Ent* ent;
 public:
-	void createEntity(EntType& type, Pos& pos);
+	void createEntity(const EntType& type, const Pos& pos);
 	Ent* getEntity();
 };

@@ -1,5 +1,6 @@
+#include <stdlib.h>
 #include <glut.h>
-#include <vector>s
+#include <vector>
 #include "game.h"
 
 using namespace std;
@@ -9,22 +10,54 @@ int windowH = 500;
 
 Game* game;
 
+void specialKeyboardCallback(int key, int x, int y) {
+	switch (key) {
+	case GLUT_KEY_UP:
+		game->keyEvent(Key::UP);
+		break;
+	case GLUT_KEY_DOWN:
+		game->keyEvent(Key::DOWN);
+		break;
+	case GLUT_KEY_LEFT:
+		game->keyEvent(Key::LEFT);
+		break;
+	case GLUT_KEY_RIGHT:
+		game->keyEvent(Key::RIGHT);
+		break;
+	}
+
+	glutPostRedisplay();
+}
+
 void myDisplay() {
-	glClearColor(1.0, 1.0, 1.0, 1.0); // 초기화 색깔은 하얀색
 	glClear(GL_COLOR_BUFFER_BIT); // 색깔 버퍼 사용
 
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective(70.0, (float)windowW / (float)windowH, 0, 200.0);
 	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glColor3f(1, 0, 0);
+	game->lookAt();
 	game->drawEntities();
+
+	glutSwapBuffers();
 }
 
 void init() {
 	game = new Game();
+	game->loadStage(1);
 	
-	glutInitDisplayMode(GLUT_RGB);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
 	glutInitWindowSize(windowW, windowH);
 	glutInitWindowPosition(0, 0);
 	glutCreateWindow("3D바위밀기 게임");
+
+	glClearColor(0.8, 0.8, 0.8, 1.0); // 초기화 색깔은 하얀색
+
+	// Call back
 	glutDisplayFunc(myDisplay);
+	glutSpecialFunc(specialKeyboardCallback);
 }
 
 int main(int argc, char** argv) {

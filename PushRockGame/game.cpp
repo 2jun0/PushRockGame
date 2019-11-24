@@ -3,7 +3,7 @@
 #include "ent_factory.h"
 
 Game::Game() {
-
+	player = NULL;
 }
 
 // 스테이지 로드
@@ -11,7 +11,9 @@ void Game::loadStage(const int& stageIdx) {
 	entities.clear(); // 맵의 모든 엔티티 삭제
 
 	string stage = STAGES[stageIdx];
-	char* token = strtok((char*)stage.c_str(), " ");
+	char* context;
+
+	char* token = strtok_s((char*)stage.c_str(), " ", &context);
 
 	EntFactory factory = EntFactory();
 
@@ -20,29 +22,34 @@ void Game::loadStage(const int& stageIdx) {
 		if(strcmp(token, "\n") == 0) {
 			z++;
 			x = 0;
-			continue;
 		}
+		else {
+			EntType entType = (EntType)atoi(token); // 엔티티 타입 구함(형변환)
+			// 엔티티가 있으면 (NONE이면 그냥 빈공간)
+			if (entType != EntType::NONE) {
+				// 엔티티 생성
+				Pos pos = Pos((float)x, 0, (float)z);	// 엔티티 좌표
 
-		EntType entType = (EntType)atoi(token); // 엔티티 타입 구함(형변환)
-		// 엔티티가 있으면 (NONE이면 그냥 빈공간)
-		if (entType != EntType::NONE) { 
-			// 엔티티 생성
-			Pos pos = Pos((float)x, 0, (float)z);	// 엔티티 좌표
-			factory.createEntity(entType, pos); // 엔티티 생성
+				factory.createEntity(entType, pos); // 엔티티 생성
+				Ent* ent = factory.getEntity(); // 생성된 엔티티 get
 
-			Ent* ent = factory.getEntity(); // 생성된 엔티티 get
-			entities.push_back(ent); // 엔티티 배열에 저장
+				if (ent->getType() == EntType::PLAYER) {
+					player = (Player*)ent;
+				}
+
+				entities.push_back(ent); // 엔티티 배열에 저장
+			}
+			x++;
 		}
-		x++;
 
 		// next token
-		token = strtok(NULL, " ");
+		token = strtok_s(NULL, " ", &context);
 	}
 }
 
 void Game::drawEntities() {
 	for (int i = 0; i < entities.size(); i++) {
-		Ent* entity = entities.at[i];
+		Ent* entity = entities[i];
 		Pos& pos = entity->getPos();
 
 		glPushMatrix();
@@ -51,5 +58,34 @@ void Game::drawEntities() {
 			entity->draw();
 		}
 		glPopMatrix();
+	}
+}
+
+void Game::lookAt() {
+	Pos& pos = player->getPos();
+
+	//gluLookAt(5, 20, 5, 5, 0, 5, 0, 0, 1);
+	gluLookAt(pos.x, pos.y+5, pos.z-1, pos.x, pos.y, pos.z-1,0,0,1);
+}
+
+void Game::keyEvent(const Key& key) {
+	switch (key)
+	{
+	case Key::UP:
+		player->getPos().z += 0.1;
+		player->rotate(0);
+		break;
+	case Key::DOWN:
+		player->getPos().z -= 0.1;
+		player->rotate(180);
+		break;
+	case Key::LEFT:
+		player->getPos().x += 0.1;
+		player->rotate(270);
+		break;
+	case Key::RIGHT:
+		player->getPos().x -= 0.1;
+		player->rotate(90);
+		break;
 	}
 }

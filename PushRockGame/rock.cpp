@@ -1,6 +1,6 @@
 #include "rock.h"
 
-const Aabb Rock::ROCK_AABB = Aabb(-0.5, 0.5, -0.5, 0.5);
+const Aabb Rock::ROCK_AABB = Aabb(-0.45, 0.45, -0.45, 0.45);
 
 Rock::Rock(const Pos& pos) : Ent(ROCK_AABB, pos, EntType::ROCK) {
 

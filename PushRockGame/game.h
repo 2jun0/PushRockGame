@@ -18,6 +18,9 @@ private:
 public:
 	Game();
 	void loadStage(const int& stageIdx);
+	
+	bool checkCollision(Ent* ent);
+
 	void drawEntities();
 	void lookAt();
 	void keyEvent(const Key& key);

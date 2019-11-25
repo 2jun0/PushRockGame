@@ -72,20 +72,42 @@ void Game::keyEvent(const Key& key) {
 	switch (key)
 	{
 	case Key::UP:
-		player->getPos().z += 0.1;
-		player->rotate(0);
+		player->moveUp();
+		if (checkCollision(player)) {
+			player->reberseMoveUp();
+		}
 		break;
 	case Key::DOWN:
-		player->getPos().z -= 0.1;
-		player->rotate(180);
+		player->moveDown();
+		if (checkCollision(player)) {
+			player->reberseMoveDown();
+		}
 		break;
 	case Key::LEFT:
-		player->getPos().x += 0.1;
-		player->rotate(270);
+		player->moveLeft();
+		if (checkCollision(player)) {
+			player->reberseMoveLeft();
+		}
 		break;
 	case Key::RIGHT:
-		player->getPos().x -= 0.1;
-		player->rotate(90);
+		player->moveRight();
+		if (checkCollision(player)) {
+			player->reberseMoveRight();
+		}
 		break;
 	}
+}
+
+bool Game::checkCollision(Ent* ent1) {
+	for (int i = 0; i < entities.size(); i++) {
+		Ent* ent = entities[i];
+
+		if (ent1 != ent && ent1->checkCollision(*ent)) {
+			ent->collisionEvent(*ent1);
+			ent1->collisionEvent(*ent);
+			return true;
+		}
+	}
+
+	return false;
 }

@@ -31,6 +31,7 @@ Pos::Pos(float x, float y, float z) {
 */
 Ent::Ent(const Aabb &aabb, const Pos &pos, const EntType &type)
 	: aabb(aabb), pos(pos), type(type) {
+	speed = 0.1;
 }
 
 Aabb& Ent::getAabb() {
@@ -41,6 +42,52 @@ Pos& Ent::getPos() {
 }
 EntType& Ent::getType() {
 	return this->type;
+}
+
+void Ent::moveLeft() {
+	this->pos.x += speed;
+}
+void Ent::moveRight() {
+	this->pos.x -= speed;
+}
+void Ent::moveUp() {
+	this->pos.z += speed;
+}
+void Ent::moveDown() {
+	this->pos.z -= speed;
+}
+
+void Ent::reberseMoveLeft() {
+	this->pos.x -= speed;
+}
+void Ent::reberseMoveRight() {
+	this->pos.x += speed;
+}
+void Ent::reberseMoveUp() {
+	this->pos.z -= speed;
+}
+void Ent::reberseMoveDown() {
+	this->pos.z += speed;
+}
+
+bool Ent::checkCollision(Ent& ent) {
+	float aMaxX = aabb.maxX + pos.x;
+	float aMinX = aabb.minX + pos.x;
+	float aMaxZ = aabb.maxZ + pos.z;
+	float aMinZ = aabb.minZ + pos.z;
+
+	float bMaxX = ent.getAabb().maxX + ent.getPos().x;
+	float bMinX = ent.getAabb().minX + ent.getPos().x;
+	float bMaxZ = ent.getAabb().maxZ + ent.getPos().z;
+	float bMinZ = ent.getAabb().minZ + ent.getPos().z;
+
+	if (aMaxX <= bMinX || aMinX >= bMaxX) return false;
+	if (aMaxZ <= bMinZ || aMinZ >= bMaxZ) return false;
+	return true;
+}
+
+void Ent::collisionEvent(Ent& ent) {
+	
 }
 /*
 	Ent end

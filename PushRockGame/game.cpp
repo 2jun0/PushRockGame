@@ -82,27 +82,15 @@ void Game::keyEvent(const Key& key) {
 	{
 	case Key::UP:
 		player->moveUp();
-		if (checkCollision(player)) {
-			player->reberseMoveUp();
-		}
 		break;
 	case Key::DOWN:
 		player->moveDown();
-		if (checkCollision(player)) {
-			player->reberseMoveDown();
-		}
 		break;
 	case Key::LEFT:
 		player->moveLeft();
-		if (checkCollision(player)) {
-			player->reberseMoveLeft();
-		}
 		break;
 	case Key::RIGHT:
 		player->moveRight();
-		if (checkCollision(player)) {
-			player->reberseMoveRight();
-		}
 		break;
 	}
 }
@@ -112,9 +100,11 @@ bool Game::checkCollision(Ent* ent1) {
 		Ent* ent = entities[i];
 
 		if (ent1 != ent && (ent1->checkCollision(*ent) && ent->checkCollision(*ent1))) {
-			ent1->collisionEvent(*ent);
-			ent->collisionEvent(*ent1);
-			return true;
+			bool c1 = ent1->collisionEvent(*ent);
+			bool c2 = ent->collisionEvent(*ent1);
+			if (c1 && c2) {
+				return true;
+			}
 		}
 	}
 

@@ -19,33 +19,42 @@ void Rock::draw() {
 	glPopMatrix();
 }
 
-void Rock::collisionEvent(Ent& ent) {
+bool Rock::collisionEvent(Ent& ent) {
 
 	// 플레이어한테만 밀림
 	if (ent.getType() == EntType::PLAYER) {
 		Player& player = (Player&)ent;
 		float angle = player.getPlayerAngle();
 
+		bool isMoved;
+
 		switch ((int)angle)
 		{
 		case 0: // up
-			moveUp();
-			player.moveUp();
+			isMoved = moveUp();
 			break;
 		case 90: // right
-			moveRight();
-			player.moveRight();
+			isMoved = moveRight();
 			break;
 		case 180: // down
-			moveDown();
-			player.moveDown();
+			isMoved = moveDown();
 			break;
 		case 270: // left
-			moveLeft();
-			player.moveLeft();
+			isMoved = moveLeft();
 			break;
 		default:
+			isMoved = false;
 			break;
 		}
+
+		if (isMoved) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+	else {
+		return true;
 	}
 }

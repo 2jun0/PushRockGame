@@ -1,3 +1,4 @@
+#include "game.h"
 #include "ent.h"
 #define NULL 0
 
@@ -44,17 +45,37 @@ EntType& Ent::getType() {
 	return this->type;
 }
 
-void Ent::moveLeft() {
+bool Ent::moveLeft() {
 	this->pos.x += speed;
+	if (Game::getInstance().checkCollision(this)) {
+		reberseMoveLeft();
+		return false;
+	}
+	return true;
 }
-void Ent::moveRight() {
+bool Ent::moveRight() {
 	this->pos.x -= speed;
+	if (Game::getInstance().checkCollision(this)) {
+		reberseMoveRight();
+		return false;
+	}
+	return true;
 }
-void Ent::moveUp() {
+bool Ent::moveUp() {
 	this->pos.z += speed;
+	if (Game::getInstance().checkCollision(this)) {
+		reberseMoveUp();
+		return false;
+	}
+	return true;
 }
-void Ent::moveDown() {
+bool Ent::moveDown() {
 	this->pos.z -= speed;
+	if (Game::getInstance().checkCollision(this)) {
+		reberseMoveDown();
+		return false;
+	}
+	return true;
 }
 
 void Ent::reberseMoveLeft() {
@@ -86,8 +107,8 @@ bool Ent::checkCollision(Ent& ent) {
 	return true;
 }
 
-void Ent::collisionEvent(Ent& ent) {
-	
+bool Ent::collisionEvent(Ent& ent) {
+	return true;
 }
 /*
 	Ent end

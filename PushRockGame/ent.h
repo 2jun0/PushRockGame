@@ -42,18 +42,18 @@ public:
 	virtual Pos& getPos();
 	virtual EntType& getType();
 
-	virtual void moveLeft();
-	virtual void moveRight();
-	virtual void moveUp();
-	virtual void moveDown();
+	virtual bool moveLeft();
+	virtual bool moveRight();
+	virtual bool moveUp();
+	virtual bool moveDown();
 
 	virtual void reberseMoveLeft();
 	virtual void reberseMoveRight();
 	virtual void reberseMoveUp();
 	virtual void reberseMoveDown();
 
-	bool checkCollision(Ent& ent);
-	virtual void collisionEvent(Ent& ent);
+	virtual bool checkCollision(Ent& ent);
+	virtual bool collisionEvent(Ent& ent);
 
 	virtual void draw()=0;
 };

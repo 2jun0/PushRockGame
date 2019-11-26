@@ -20,14 +20,14 @@ public:
 	void rotate(float angle);
 	virtual void draw();
 
-	virtual void moveLeft();
-	virtual void moveRight();
-	virtual void moveUp();
-	virtual void moveDown();
+	virtual bool moveLeft();
+	virtual bool moveRight();
+	virtual bool moveUp();
+	virtual bool moveDown();
 	void raiseArms();
 	void unraiseArms();
 
-	virtual void collisionEvent(Ent& ent);
+	virtual bool collisionEvent(Ent& ent);
 	virtual bool checkCollision(Ent& ent);
 
 private:

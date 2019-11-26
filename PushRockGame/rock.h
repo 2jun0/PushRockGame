@@ -9,5 +9,5 @@ public:
 
 	virtual void draw();
 
-	virtual void collisionEvent(Ent& ent);
+	virtual bool collisionEvent(Ent& ent);
 };

@@ -28,6 +28,7 @@ public:
 	void unraiseArms();
 
 	virtual void collisionEvent(Ent& ent);
+	virtual bool checkCollision(Ent& ent);
 
 private:
 	void drawArm();

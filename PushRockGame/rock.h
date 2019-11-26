@@ -8,4 +8,6 @@ public:
 	Rock(const Pos& pos);
 
 	virtual void draw();
+
+	virtual void collisionEvent(Ent& ent);
 };

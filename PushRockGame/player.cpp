@@ -1,8 +1,11 @@
+#include <cmath>
 #include "player.h"
 
 const Aabb Player::PLAYER_AABB = Aabb(-0.4, 0.4, -0.4, 0.4);
 
 Player::Player(const Pos& pos) : Ent(PLAYER_AABB, pos, EntType::PLAYER) {
+	speed = 1;
+
 	angles[PLAYER_ANGLE] = 0;
 	angles[LEFT_ARM] = 0;
 	angles[RIGHT_ARM] = 0;
@@ -81,6 +84,39 @@ void Player::collisionEvent(Ent& ent) {
 			raiseArms();
 		}
 	}
+}
+
+bool Player::checkCollision(Ent& ent) {
+	float aMaxX = aabb.maxX + pos.x;
+	float aMinX = aabb.minX + pos.x;
+	float aMaxZ = aabb.maxZ + pos.z;
+	float aMinZ = aabb.minZ + pos.z;
+
+	// 삼각함수 적용
+	// x' = xcos(a) - ysin(a)
+	// y' = xsin(a) + ycos(a)
+	float radian = getPlayerAngle() / 360.0 * 3.14;
+
+	float p1X = aMaxX * cos(radian) - aMaxZ * sin(radian);
+	float p1Z = aMaxX * sin(radian) + aMaxZ * cos(radian);
+	float p2X = aMaxX * cos(radian) - aMinZ * sin(radian);
+	float p2Z = aMaxX * sin(radian) + aMinZ * cos(radian);
+	float p3X = aMinX * cos(radian) - aMaxZ * sin(radian);
+	float p3Z = aMinX * sin(radian) + aMaxZ * cos(radian);
+	float p4X = aMinX * cos(radian) - aMinZ * sin(radian);
+	float p4Z = aMinX * sin(radian) + aMinZ * cos(radian);
+
+	float bMaxX = ent.getAabb().maxX + ent.getPos().x;
+	float bMinX = ent.getAabb().minX + ent.getPos().x;
+	float bMaxZ = ent.getAabb().maxZ + ent.getPos().z;
+	float bMinZ = ent.getAabb().minZ + ent.getPos().z;
+
+	if ((bMinX < p1X && bMaxX > p1X) && (bMinZ < p1Z && bMaxZ > p1Z)) return true;
+	if ((bMinX < p2X && bMaxX > p2X) && (bMinZ < p2Z && bMaxZ > p2Z)) return true;
+	if ((bMinX < p3X && bMaxX > p3X) && (bMinZ < p3Z && bMaxZ > p3Z)) return true;
+	if ((bMinX < p4X && bMaxX > p4X) && (bMinZ < p4Z && bMaxZ > p4Z)) return true;
+
+	return false;
 }
 
 // --------------- actions ------------------//

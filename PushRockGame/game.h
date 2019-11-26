@@ -13,10 +13,14 @@ enum class Key {
 
 class Game {
 private:
+	static Game* myInstance;
 	vector<Ent*> entities;
 	Player* player;
-public:
+private:
 	Game();
+public:
+	static  Game& getInstance();
+
 	void loadStage(const int& stageIdx);
 	
 	bool checkCollision(Ent* ent);

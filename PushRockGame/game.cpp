@@ -2,6 +2,15 @@
 #include "game.h"
 #include "ent_factory.h"
 
+Game* Game::myInstance = NULL;
+Game& Game::getInstance() {
+	if (Game::myInstance == NULL) {
+		Game::myInstance = new Game();
+	}
+
+	return *Game::myInstance;
+}
+
 Game::Game() {
 	player = NULL;
 }
@@ -102,9 +111,9 @@ bool Game::checkCollision(Ent* ent1) {
 	for (int i = 0; i < entities.size(); i++) {
 		Ent* ent = entities[i];
 
-		if (ent1 != ent && ent1->checkCollision(*ent)) {
-			ent->collisionEvent(*ent1);
+		if (ent1 != ent && (ent1->checkCollision(*ent) && ent->checkCollision(*ent1))) {
 			ent1->collisionEvent(*ent);
+			ent->collisionEvent(*ent1);
 			return true;
 		}
 	}

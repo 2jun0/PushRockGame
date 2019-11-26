@@ -8,21 +8,19 @@ using namespace std;
 int windowW = 500;
 int windowH = 500;
 
-Game* game;
-
 void specialKeyboardCallback(int key, int x, int y) {
 	switch (key) {
 	case GLUT_KEY_UP:
-		game->keyEvent(Key::UP);
+		Game::getInstance().keyEvent(Key::UP);
 		break;
 	case GLUT_KEY_DOWN:
-		game->keyEvent(Key::DOWN);
+		Game::getInstance().keyEvent(Key::DOWN);
 		break;
 	case GLUT_KEY_LEFT:
-		game->keyEvent(Key::LEFT);
+		Game::getInstance().keyEvent(Key::LEFT);
 		break;
 	case GLUT_KEY_RIGHT:
-		game->keyEvent(Key::RIGHT);
+		Game::getInstance().keyEvent(Key::RIGHT);
 		break;
 	}
 
@@ -38,15 +36,14 @@ void myDisplay() {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glColor3f(1, 0, 0);
-	game->lookAt();
-	game->drawEntities();
+	Game::getInstance().lookAt();
+	Game::getInstance().drawEntities();
 
 	glutSwapBuffers();
 }
 
 void init() {
-	game = new Game();
-	game->loadStage(1);
+	Game::getInstance().loadStage(2);
 	
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
 	glutInitWindowSize(windowW, windowH);

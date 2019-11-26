@@ -2,6 +2,13 @@
 #include "game.h"
 #include "ent_factory.h"
 
+EntType Game::ENTITY_Y_INDEX[] = {
+	EntType::WALL,
+	EntType::BUTTON,
+	EntType::ROCK,
+	EntType::PLAYER
+};
+
 Game* Game::myInstance = NULL;
 Game& Game::getInstance() {
 	if (Game::myInstance == NULL) {
@@ -46,7 +53,7 @@ void Game::loadStage(const int& stageIdx) {
 					player = (Player*)ent;
 				}
 
-				entities.push_back(ent); // 엔티티 배열에 저장
+				addEntity(ent); // 엔티티 배열에 저장
 			}
 			x++;
 		}
@@ -56,24 +63,39 @@ void Game::loadStage(const int& stageIdx) {
 	}
 }
 
-void Game::drawEntities() {
-	for (int i = 0; i < entities.size(); i++) {
-		Ent* entity = entities[i];
-		Pos& pos = entity->getPos();
+void Game::addEntity(Ent* ent) {
+	getEntities(ent->getType())->push_back(ent);
+}
 
-		glPushMatrix();
-		{
-			glTranslatef(pos.x, pos.y, pos.z);
-			entity->draw();
+vector<Ent*>* Game::getEntities(const EntType& type) {
+	if (entities.count(type) == 0) {
+		entities[type] = new vector<Ent*>();
+	}
+
+	return entities[type];
+}
+
+void Game::drawEntities() {
+	int n = sizeof(ENTITY_Y_INDEX) / sizeof(EntType);
+	for (int typeIdx = 0; typeIdx < n; typeIdx++) {
+		vector<Ent*>* v = entities[ENTITY_Y_INDEX[typeIdx]];
+		for (int i = 0; i < v->size(); i++) {
+			Ent* entity = (*v)[i];
+			Pos& pos = entity->getPos();
+
+			glPushMatrix();
+			{
+				glTranslatef(pos.x, pos.y, pos.z);
+				entity->draw();
+			}
+			glPopMatrix();
 		}
-		glPopMatrix();
 	}
 }
 
 void Game::lookAt() {
 	Pos& pos = player->getPos();
 
-	//gluLookAt(5, 20, 5, 5, 0, 5, 0, 0, 1);
 	gluLookAt(pos.x, pos.y+5, pos.z-1, pos.x, pos.y, pos.z-1,0,0,1);
 }
 
@@ -96,17 +118,34 @@ void Game::keyEvent(const Key& key) {
 }
 
 bool Game::checkCollision(Ent* ent1) {
-	for (int i = 0; i < entities.size(); i++) {
-		Ent* ent = entities[i];
+	int n = sizeof(ENTITY_Y_INDEX) / sizeof(EntType);
+	for(int typeIdx = 0; typeIdx < n; typeIdx++) {
+		vector<Ent*>* v = entities[ENTITY_Y_INDEX[typeIdx]];
+		for (int i = 0; i < v->size(); i++) {
+			Ent* ent = (*v)[i];
 
-		if (ent1 != ent && (ent1->checkCollision(*ent) && ent->checkCollision(*ent1))) {
-			bool c1 = ent1->collisionEvent(*ent);
-			bool c2 = ent->collisionEvent(*ent1);
-			if (c1 && c2) {
-				return true;
+			if (ent1 != ent && (ent1->checkCollision(*ent) && ent->checkCollision(*ent1))) {
+				bool c1 = ent1->collisionEvent(*ent);
+				bool c2 = ent->collisionEvent(*ent1);
+				if (c1 && c2) {
+					return true;
+				}
 			}
 		}
 	}
 
 	return false;
+}
+
+Ent* Game::getCollisionEntity(Ent* ent1, const EntType& type) {
+	vector<Ent*>* v = getEntities(type);
+	for (int i = 0; i < v->size(); i++) {
+		Ent* ent = (*v)[i];
+
+		if (ent1 != ent && (ent1->checkCollision(*ent) && ent->checkCollision(*ent1))) {
+			return ent;
+		}
+	}
+
+	return NULL;
 }

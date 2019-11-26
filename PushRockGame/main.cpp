@@ -28,18 +28,23 @@ void specialKeyboardCallback(int key, int x, int y) {
 }
 
 void myDisplay() {
-	glClear(GL_COLOR_BUFFER_BIT); // 색깔 버퍼 사용
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // 색깔 버퍼 사용
 
+	glViewport(0, 0, windowW, windowH);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(70.0, (float)windowW / (float)windowH, 0, 200.0);
+	gluPerspective(70.0, (float)windowW / (float)windowH, -5.0, 0);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glColor3f(1, 0, 0);
 	Game::getInstance().lookAt();
 	Game::getInstance().drawEntities();
 
 	glutSwapBuffers();
+}
+
+void myReshape(int w, int h) {
+	windowH = h;
+	windowW = w;
 }
 
 void init() {
@@ -54,6 +59,7 @@ void init() {
 
 	// Call back
 	glutDisplayFunc(myDisplay);
+	glutReshapeFunc(myReshape);
 	glutSpecialFunc(specialKeyboardCallback);
 }
 

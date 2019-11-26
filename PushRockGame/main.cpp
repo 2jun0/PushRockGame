@@ -43,7 +43,7 @@ void myDisplay() {
 }
 
 void init() {
-	Game::getInstance().loadStage(2);
+	Game::getInstance().loadStage(0);
 	
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
 	glutInitWindowSize(windowW, windowH);

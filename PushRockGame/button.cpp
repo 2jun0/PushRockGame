@@ -14,8 +14,8 @@ void Button::draw() {
 		glVertex3f(-0.5, -0.5, 0.0);
 		glVertex3f(0.5, -0.5, 0.0);
 		glVertex3f(0.5, 0.5, 0.0);
-		glVertex3f(-0.5 , 0.5, 0.0);
+		glVertex3f(-0.5, 0.5, 0.0);
 		glEnd();
-
+	}
 	glPopMatrix();
 }

@@ -4,6 +4,7 @@
 class Rock : public Ent {
 public:
 	static const Aabb ROCK_AABB;
+	static const float COLOR[];
 public:
 	Rock(const Pos& pos);
 

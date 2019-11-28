@@ -4,4 +4,5 @@
 
 using namespace std;
 
+extern const int STAGE_COUNT;
 extern const string STAGES[];

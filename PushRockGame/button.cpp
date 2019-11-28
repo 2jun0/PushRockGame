@@ -2,9 +2,15 @@
 #include "button.h"
 
 const Aabb Button::BUTTON_AABB = Aabb(-0.5, 0.5, -0.5, 0.5);
+const float Button::PRESSED_COLOR[] = {1.0, 1.0, 0.0};
+const float Button::UNPRESSED_COLOR[] = {0.8, 0.8, 0.0};
 
 Button::Button(const Pos& pos) : Ent(BUTTON_AABB, pos, EntType::BUTTON) {
 	isPressed = false;
+}
+
+bool Button::getIsPressed() {
+	return isPressed;
 }
 
 void Button::draw() {
@@ -14,17 +20,15 @@ void Button::draw() {
 	glPushMatrix();
 	{
 		if (isPressed) {
-			glColor3f(1.0, 1.0, 0.0); // ´­·ÈÀ» ¶§, »ö±ò
+			//glColor3f(1.0, 1.0, 0.0); 
+			glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, PRESSED_COLOR);// ´­·ÈÀ» ¶§, »ö±ò
 		}
 		else {
-			glColor3f(0.8, 0.8, 0.0); // ¾È ´­·ÈÀ» ¶§, »ö±ò
+			//glColor3f(0.8, 0.8, 0.0);
+			glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, UNPRESSED_COLOR);// ¾È ´­·ÈÀ» ¶§, »ö±ò
 		}
-		glBegin(GL_POLYGON);
-		glVertex3f(-0.5, 0,-0.5);
-		glVertex3f(0.5,0,-0.5);
-		glVertex3f(0.5, 0, 0.5);
-		glVertex3f(-0.5, 0, 0.5);
-		glEnd();
+		glScalef(1, 0, 1);
+		glutSolidCube(1);
 	}
 	glPopMatrix();
 }

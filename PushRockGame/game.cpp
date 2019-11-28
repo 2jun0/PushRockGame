@@ -20,13 +20,21 @@ Game& Game::getInstance() {
 
 Game::Game() {
 	player = NULL;
+	mapH = 0;
+	mapW = 0;
+	stageIdx = 4;
+	isGameClear = false;
 }
 
 // 스테이지 로드
 void Game::loadStage(const int& stageIdx) {
 	entities.clear(); // 맵의 모든 엔티티 삭제
+	// 맵 크기 초기화
+	mapH = 0;
+	mapW = 0;
 
 	string stage = STAGES[stageIdx];
+
 	char* context;
 
 	char* token = strtok_s((char*)stage.c_str(), " ", &context);
@@ -37,6 +45,7 @@ void Game::loadStage(const int& stageIdx) {
 	while (token != NULL) {
 		if(strcmp(token, "\n") == 0) {
 			z++;
+			mapW = (mapW > x) ? mapW : x;
 			x = 0;
 		}
 		else {
@@ -61,6 +70,15 @@ void Game::loadStage(const int& stageIdx) {
 		// next token
 		token = strtok_s(NULL, " ", &context);
 	}
+
+	mapH = z;
+}
+
+void Game::loadGameClearStage() {
+	entities.clear();
+
+	player = new Player(Pos(0,0,0));
+	player->superMan();
 }
 
 void Game::addEntity(Ent* ent) {
@@ -73,6 +91,19 @@ vector<Ent*>* Game::getEntities(const EntType& type) {
 	}
 
 	return entities[type];
+}
+
+void Game::draw() {
+	if (!isGameClear) {
+		drawEntities();
+	}
+	else {
+		drawGameClear();
+	}
+}
+
+void Game::drawGameClear() {
+	player->draw();
 }
 
 void Game::drawEntities() {
@@ -91,12 +122,77 @@ void Game::drawEntities() {
 			glPopMatrix();
 		}
 	}
+
+	// 모든 버튼이 눌렸는지 확인
+	if (checkAllButtonPressed()) {
+		// 다음 스테이지 이동!
+		nextStage();
+	}
 }
 
-void Game::lookAt() {
-	Pos& pos = player->getPos();
+// 모든 버튼이 눌렸는지 확인하는 함수
+bool Game::checkAllButtonPressed() {
+	vector<Button*>* buttons = (vector<Button*>*)Game::getEntities(EntType::BUTTON);
 
-	gluLookAt(pos.x, pos.y+5, pos.z-1, pos.x, pos.y, pos.z-1,0,0,1);
+	bool isAllPressed = (buttons->size() > 0) ? true : false;
+	for (int i = 0; i < buttons->size(); i++) {
+		if (!(*buttons)[i]->getIsPressed()) {
+			isAllPressed = false;
+			break;
+		}
+	}
+
+	return isAllPressed;
+}
+
+void Game::restart() {
+	isGameClear = false;
+	stageIdx = 0;
+	loadStage(stageIdx);
+	glutPostRedisplay();
+}
+
+void Game::nextStage() {
+	if (stageIdx == STAGE_COUNT-1) {
+		// 이미 마지막 스테이지인 경우는 게임 클리어!
+		isGameClear = true;
+		stageIdx++;
+		loadGameClearStage();
+	}
+	else {
+		// 뒤에 더 있는 경우는 다음 스테이지로 이동
+		stageIdx++;
+		loadStage(stageIdx);
+	}
+}
+
+void Game::beforeStage() {
+	// 이미 처음 스테이지면, 실행 안됨!
+	if (stageIdx > 0) {
+		isGameClear = false;
+		stageIdx--;
+		loadStage(stageIdx);
+		glutPostRedisplay();
+	}
+}
+
+void Game::updateLight() {
+	Pos& pos = player->getPos();
+	float lightPos[] = {pos.x, pos.y+3, pos.z-1, 1};
+
+	//float lightPos[] = { mapW / 2, 3, mapH / 2,1 };
+	glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+}
+
+
+void Game::lookAt() {
+	if (!isGameClear) {
+		Pos& pos = player->getPos();
+		gluLookAt(pos.x, pos.y + 5, pos.z - 1, pos.x, pos.y, pos.z - 1, 0, 0, 1);
+	}
+	else {
+		gluLookAt(0, 5, -2, 0, 0, 0, 0, 1, 0);
+	}
 }
 
 void Game::keyEvent(const Key& key) {
@@ -113,6 +209,16 @@ void Game::keyEvent(const Key& key) {
 		break;
 	case Key::RIGHT:
 		player->moveRight();
+		break;
+	case Key::RESET:
+		loadStage(stageIdx);
+		glutPostRedisplay();
+		break;
+	case Key::RESTART:
+		stageIdx = 0;
+		isGameClear = false;
+		loadStage(stageIdx);
+		glutPostRedisplay();
 		break;
 	}
 }

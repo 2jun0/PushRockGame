@@ -2,6 +2,8 @@
 #include "player.h"
 
 const Aabb Player::PLAYER_AABB = Aabb(-0.45, 0.45, -0.2, 0.2);
+const float Player::ARM_COLOR[] = { 1.0, 0.5, 1.0 };
+const float Player::BODY_COLOR[] = { 1.0, 0.5, 1.0 };
 
 Player::Player(const Pos& pos) : Ent(PLAYER_AABB, pos, EntType::PLAYER) {
 	speed = 1;
@@ -12,6 +14,8 @@ Player::Player(const Pos& pos) : Ent(PLAYER_AABB, pos, EntType::PLAYER) {
 
 	isRaising = false;
 	isRaised = false;
+	isSuperman = false;
+	superManRotateFlag = false;
 }
 
 // ------------------- draw ------------------//
@@ -23,9 +27,10 @@ void Player::draw() {
 		// ¸öÅë ±×¸®±â
 		glPushMatrix();
 		{
-			glColor3f(1, 0, 0);
+			//glColor3f(1, 0, 0);
+			glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, BODY_COLOR);
 			glScalef(0.5, 0.8, 0.4);
-			glutWireCube(1);
+			glutSolidCube(1);
 		}
 		glPopMatrix();
 
@@ -62,9 +67,10 @@ void Player::draw() {
 void Player::drawArm() {
 	glPushMatrix();
 	{
-		glColor3f(0, 0, 1);
+		//glColor3f(0, 0, 1);
+		glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, ARM_COLOR);
 		glScalef(0.2, 0.5, 0.2);
-		glutWireCube(1);
+		glutSolidCube(1);
 	}
 	glPopMatrix();
 }
@@ -124,18 +130,22 @@ void Player::rotate(float angle) {
 }
 
 bool Player::moveLeft() {
+	if (isSuperman) return false;
 	rotate(270);
 	return Ent::moveLeft();
 }
 bool Player::moveRight() {
+	if (isSuperman) return false;
 	rotate(90);
 	return Ent::moveRight();
 }
 bool Player::moveUp() {
+	if (isSuperman) return false;
 	rotate(0);
 	return Ent::moveUp();
 }
 bool Player::moveDown() {
+	if (isSuperman) return false;
 	rotate(180);
 	return Ent::moveDown();
 }
@@ -182,6 +192,34 @@ void Player::unraiseArms() {
 	}
 }
 
+void Player::superMan() {
+	isSuperman = true;
+	angles[LEFT_ARM] = 180;
+	angles[RIGHT_ARM] = 180;
+	superManRotate();
+}
+
+void Player::superManRotate() {
+	if (isSuperman) {
+		if (angles[PLAYER_ANGLE] > 360) {
+			superManRotateFlag = false;
+		}
+		else if(angles[PLAYER_ANGLE] < 0){
+			superManRotateFlag = true;
+		}
+
+		if (superManRotateFlag) {
+			angles[PLAYER_ANGLE] += 1.0;
+		}
+		else {
+			angles[PLAYER_ANGLE] -= 1.0;
+		}
+
+		glutPostRedisplay();
+		glutTimerFunc(5, superManRotateCall, (int)this);
+	}
+}
+
 void raiseArmsCall(int p) {
 	Player* player = (Player*)p;
 	player->raiseArms();
@@ -197,4 +235,9 @@ void unraiseArmTimerCall(int p) {
 void unraiseArmsCall(int p) {
 	Player* player = (Player*)p;
 	player->unraiseArms();
+}
+
+void superManRotateCall(int p) {
+	Player* player = (Player*)p;
+	player->superManRotate();
 }

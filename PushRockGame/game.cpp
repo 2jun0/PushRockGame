@@ -22,7 +22,7 @@ Game::Game() {
 	player = NULL;
 	mapH = 0;
 	mapW = 0;
-	stageIdx = 4;
+	stageIdx = 0;
 	isGameClear = false;
 }
 

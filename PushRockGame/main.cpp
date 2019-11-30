@@ -97,7 +97,7 @@ void callbackInit() {
 }
 
 void init() {
-	Game::getInstance().loadStage(4);
+	Game::getInstance().loadStage(0);
 	
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 	glutInitWindowSize(windowW, windowH);

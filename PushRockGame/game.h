@@ -25,6 +25,7 @@ private:
 	int stageIdx;
 	bool isGameClear;
 public:
+	static const float GROUND_COLOR[];
 	static EntType ENTITY_Y_INDEX[];
 private:
 	Game();
@@ -46,10 +47,16 @@ public:
 	bool checkAllButtonPressed();
 
 	void draw();
+	void drawGround();
 	void drawEntities();
 	void drawGameClear();
+	void drawMiniMap();
 
 	void updateLight();
 	void lookAt();
 	void keyEvent(const Key& key);
+
+	int getMapWidth();
+	int getMapHeight();
+	bool getIsGameClear();
 };

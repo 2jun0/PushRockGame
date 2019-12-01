@@ -38,6 +38,8 @@ public:
 	virtual bool collisionEvent(Ent& ent);
 	virtual bool checkCollision(Ent& ent);
 
+	virtual const float* getColor();
+
 private:
 	void drawArm();
 };

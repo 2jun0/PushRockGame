@@ -241,3 +241,7 @@ void superManRotateCall(int p) {
 	Player* player = (Player*)p;
 	player->superManRotate();
 }
+
+const float* Player::getColor() {
+	return BODY_COLOR;
+}

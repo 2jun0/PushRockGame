@@ -2,6 +2,8 @@
 #include "game.h"
 #include "ent_factory.h"
 
+const float Game::GROUND_COLOR[] = { 0.52, 0.35, 0.27 };
+
 EntType Game::ENTITY_Y_INDEX[] = {
 	EntType::WALL,
 	EntType::BUTTON,
@@ -41,7 +43,7 @@ void Game::loadStage(const int& stageIdx) {
 
 	EntFactory factory = EntFactory();
 
-	int z = 0, x = 0;
+	int z = 1, x = 0;
 	while (token != NULL) {
 		if(strcmp(token, "\n") == 0) {
 			z++;
@@ -96,6 +98,7 @@ vector<Ent*>* Game::getEntities(const EntType& type) {
 void Game::draw() {
 	if (!isGameClear) {
 		drawEntities();
+		drawGround();
 	}
 	else {
 		drawGameClear();
@@ -104,6 +107,27 @@ void Game::draw() {
 
 void Game::drawGameClear() {
 	player->draw();
+}
+
+void Game::drawMiniMap() {
+
+	int n = sizeof(ENTITY_Y_INDEX) / sizeof(EntType);
+	for (int typeIdx = 0; typeIdx < n; typeIdx++) {
+		vector<Ent*>* v = entities[ENTITY_Y_INDEX[typeIdx]];
+		for (int i = 0; i < v->size(); i++) {
+			Ent* entity = (*v)[i];
+			Pos& pos = entity->getPos();
+			const float* color = entity->getColor();
+
+			glPushMatrix();
+			{
+				glTranslatef(pos.x, pos.y+2, pos.z);
+				glColor3f(color[0], color[1], color[2]);
+				glutSolidCube(1);
+			}
+			glPopMatrix();
+		}
+	}
 }
 
 void Game::drawEntities() {
@@ -128,6 +152,17 @@ void Game::drawEntities() {
 		// 다음 스테이지 이동!
 		nextStage();
 	}
+}
+
+void Game::drawGround() {
+	glPushMatrix();
+	{
+		glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, GROUND_COLOR);
+		glTranslatef(mapW/2.0 - 0.5, 0, mapH/2.0 + 0.5);
+		glScalef(mapW, 0, mapH);
+		glutSolidCube(1);
+	}
+	glPopMatrix();
 }
 
 // 모든 버튼이 눌렸는지 확인하는 함수
@@ -233,8 +268,15 @@ bool Game::checkCollision(Ent* ent1) {
 			if (ent1 != ent && (ent1->checkCollision(*ent) && ent->checkCollision(*ent1))) {
 				bool c1 = ent1->collisionEvent(*ent);
 				bool c2 = ent->collisionEvent(*ent1);
+
 				if (c1 && c2) {
+					ent1->afterCollisionEvent(*ent, true);
+					ent->afterCollisionEvent(*ent1, true);
 					return true;
+				}
+				else {
+					ent1->afterCollisionEvent(*ent, false);
+					ent->afterCollisionEvent(*ent1, false);
 				}
 			}
 		}
@@ -254,4 +296,15 @@ Ent* Game::getCollisionEntity(Ent* ent1, const EntType& type) {
 	}
 
 	return NULL;
+}
+
+int Game::getMapWidth() {
+	return mapW;
+}
+int Game::getMapHeight() {
+	return mapH;
+}
+
+bool Game::getIsGameClear() {
+	return isGameClear;
 }

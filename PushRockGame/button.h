@@ -14,6 +14,8 @@ public:
 	bool getIsPressed();
 
 	virtual bool collisionEvent(Ent& ent);
+	virtual void afterCollisionEvent(Ent& ent, bool isCollision);
 
 	virtual void draw();
+	virtual const float* getColor();
 };

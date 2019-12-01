@@ -11,4 +11,5 @@ public:
 	virtual void draw();
 
 	virtual bool collisionEvent(Ent& ent);
+	virtual const float* getColor();
 };

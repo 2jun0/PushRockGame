@@ -9,4 +9,5 @@ public:
 	Wall(const Pos& pos);
 
 	virtual void draw();
+	virtual const float* getColor();
 };

@@ -37,6 +37,7 @@ public:
 	void loadGameClearStage();
 	void nextStage();
 	void beforeStage();
+	void reset();
 	
 	bool checkCollision(Ent* ent);
 	Ent* getCollisionEntity(Ent* ent, const EntType& type);

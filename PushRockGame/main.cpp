@@ -1,3 +1,4 @@
+#include <iostream>
 #include <stdlib.h>
 #include <glut.h>
 #include <vector>
@@ -7,7 +8,16 @@
 int windowW = 500;
 int windowH = 500;
 
+void keyLog(string log) {
+	cout << "Key input : " << log << endl;
+}
+
+void keyLog(unsigned char log) {
+	cout << "Key input : " << log << endl;
+}
+
 void keyboardCallback(unsigned char key, int x, int y) {
+	keyLog(key);
 	switch (key)
 	{
 	case 'r':
@@ -23,15 +33,19 @@ void keyboardCallback(unsigned char key, int x, int y) {
 void specialKeyboardCallback(int key, int x, int y) {
 	switch (key) {
 	case GLUT_KEY_UP:
+		keyLog("KEY UP");
 		Game::getInstance().keyEvent(Key::UP);
 		break;
 	case GLUT_KEY_DOWN:
+		keyLog("KEY DOWN");
 		Game::getInstance().keyEvent(Key::DOWN);
 		break;
 	case GLUT_KEY_LEFT:
+		keyLog("KEY LEFT");
 		Game::getInstance().keyEvent(Key::LEFT);
 		break;
 	case GLUT_KEY_RIGHT:
+		keyLog("KEY RIGHT");
 		Game::getInstance().keyEvent(Key::RIGHT);
 		break;
 	}
@@ -41,6 +55,9 @@ void specialKeyboardCallback(int key, int x, int y) {
 
 void mainPopupMenu(int entryId) {
 	switch (entryId) {
+	case RESET:
+		Game::getInstance().reset();
+		break;
 	case RESTART:
 		Game::getInstance().restart();
 		break;
@@ -64,16 +81,14 @@ void myDisplay() {
 	Game::getInstance().updateLight();
 	Game::getInstance().draw();
 
-	//// minimap
+	// minimap
 	//if (!Game::getInstance().getIsGameClear()) {
 	//	glDisable(GL_LIGHTING);
 	//	glViewport(windowW / 3 * 2, 0, windowW / 3, windowW / 3);
 	//	glMatrixMode(GL_PROJECTION);
-	//	glLoadIdentity();
 	//	int size = Game::getInstance().getMapWidth() > Game::getInstance().getMapHeight() ? Game::getInstance().getMapWidth() : Game::getInstance().getMapHeight();
 	//	glOrtho(-size, size, -size, size, -1, 1);
 	//	glMatrixMode(GL_MODELVIEW);
-	//	glLoadIdentity();
 	//	gluLookAt(Game::getInstance().getMapWidth() / 2, 3, Game::getInstance().getMapHeight() / 2, Game::getInstance().getMapWidth() / 2, 0, Game::getInstance().getMapHeight() / 2, 0, 0, 1);
 	//	Game::getInstance().drawMiniMap();
 	//	glEnable(GL_LIGHTING);
@@ -89,7 +104,8 @@ void myReshape(int w, int h) {
 
 void popupMenuInit() {
 	int mainPopupMenuId = glutCreateMenu(mainPopupMenu);
-	glutAddMenuEntry("재시작", RESTART);
+	glutAddMenuEntry("현재 스테이지 다시하기", RESET);
+	glutAddMenuEntry("처음 스테이지로", RESTART);
 	glutAddMenuEntry("이전 스테이지로", BEFORE_STAGE);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 }

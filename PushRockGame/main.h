@@ -5,7 +5,8 @@ extern int windowW;
 extern int windowH;
 
 enum MAIN_MENU_ENTRY_ID {
-	RESTART = 1,
+	RESET = 1,
+	RESTART,
 	BEFORE_STAGE
 };
 

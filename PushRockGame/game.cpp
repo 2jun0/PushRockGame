@@ -187,6 +187,11 @@ void Game::restart() {
 	glutPostRedisplay();
 }
 
+void Game::reset() {
+	loadStage(stageIdx);
+	glutPostRedisplay();
+}
+
 void Game::nextStage() {
 	if (stageIdx == STAGE_COUNT-1) {
 		// 이미 마지막 스테이지인 경우는 게임 클리어!
@@ -219,7 +224,6 @@ void Game::updateLight() {
 	glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
 }
 
-
 void Game::lookAt() {
 	if (!isGameClear) {
 		Pos& pos = player->getPos();
@@ -246,14 +250,10 @@ void Game::keyEvent(const Key& key) {
 		player->moveRight();
 		break;
 	case Key::RESET:
-		loadStage(stageIdx);
-		glutPostRedisplay();
+		reset();
 		break;
 	case Key::RESTART:
-		stageIdx = 0;
-		isGameClear = false;
-		loadStage(stageIdx);
-		glutPostRedisplay();
+		restart();
 		break;
 	}
 }

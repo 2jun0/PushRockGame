@@ -30,6 +30,7 @@ Pos::Pos(float x, float y, float z) {
 /*
 	Ent start
 */
+
 Ent::Ent(const Aabb &aabb, const Pos &pos, const EntType &type)
 	: aabb(aabb), pos(pos), type(type) {
 	speed = 0.1;
@@ -109,6 +110,10 @@ bool Ent::checkCollision(Ent& ent) {
 
 bool Ent::collisionEvent(Ent& ent) {
 	return true;
+}
+
+void Ent::afterCollisionEvent(Ent& ent, bool isCollision) {
+
 }
 /*
 	Ent end

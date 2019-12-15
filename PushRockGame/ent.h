@@ -54,6 +54,8 @@ public:
 
 	virtual bool checkCollision(Ent& ent);
 	virtual bool collisionEvent(Ent& ent);
+	virtual void afterCollisionEvent(Ent& ent, bool isCollision);
 
 	virtual void draw()=0;
+	virtual const float* getColor() = 0;
 };

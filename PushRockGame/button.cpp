@@ -1,5 +1,6 @@
 #include "game.h"
 #include "button.h"
+#include "sound_manager.h"
 
 const Aabb Button::BUTTON_AABB = Aabb(-0.5, 0.5, -0.5, 0.5);
 const float Button::PRESSED_COLOR[] = {1.0, 1.0, 0.0};
@@ -34,5 +35,21 @@ void Button::draw() {
 }
 
 bool Button::collisionEvent(Ent& ent)  {
+
 	return false;
+}
+
+void Button::afterCollisionEvent(Ent& ent, bool isCollision) {
+	if ((!isCollision && ent.getType() == EntType::ROCK) && !isPressed) {
+		SoundManager::getInstance().play(SoundRes::BUTTON_PRESS_WAV);
+	}
+}
+
+const float* Button::getColor() {
+	if (isPressed) {
+		return PRESSED_COLOR;
+	}
+	else {
+		return UNPRESSED_COLOR;
+	}
 }

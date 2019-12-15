@@ -53,6 +53,7 @@ void mainPopupMenu(int entryId) {
 void myDisplay() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // 색깔 버퍼 사용
 
+	// in game
 	glViewport(0, 0, windowW, windowH);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -60,10 +61,23 @@ void myDisplay() {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	Game::getInstance().lookAt();
-
 	Game::getInstance().updateLight();
-	
 	Game::getInstance().draw();
+
+	//// minimap
+	//if (!Game::getInstance().getIsGameClear()) {
+	//	glDisable(GL_LIGHTING);
+	//	glViewport(windowW / 3 * 2, 0, windowW / 3, windowW / 3);
+	//	glMatrixMode(GL_PROJECTION);
+	//	glLoadIdentity();
+	//	int size = Game::getInstance().getMapWidth() > Game::getInstance().getMapHeight() ? Game::getInstance().getMapWidth() : Game::getInstance().getMapHeight();
+	//	glOrtho(-size, size, -size, size, -1, 1);
+	//	glMatrixMode(GL_MODELVIEW);
+	//	glLoadIdentity();
+	//	gluLookAt(Game::getInstance().getMapWidth() / 2, 3, Game::getInstance().getMapHeight() / 2, Game::getInstance().getMapWidth() / 2, 0, Game::getInstance().getMapHeight() / 2, 0, 0, 1);
+	//	Game::getInstance().drawMiniMap();
+	//	glEnable(GL_LIGHTING);
+	//}
 
 	glutSwapBuffers();
 }

@@ -1,3 +1,4 @@
+#include "sound_manager.h"
 #include "rock.h"
 #include "player.h"
 
@@ -50,6 +51,7 @@ bool Rock::collisionEvent(Ent& ent) {
 		}
 
 		if (isMoved) {
+			//SoundManager::getInstance().play(SoundRes::ROCK_MOVE_WAV);
 			return false;
 		}
 		else {
@@ -59,4 +61,8 @@ bool Rock::collisionEvent(Ent& ent) {
 	else {
 		return true;
 	}
+}
+
+const float* Rock::getColor() {
+	return COLOR;
 }

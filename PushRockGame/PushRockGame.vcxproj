@@ -130,6 +130,7 @@
     <ClCompile Include="ent.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="rock.cpp" />
+    <ClCompile Include="sound_manager.cpp" />
     <ClCompile Include="stage.cpp" />
     <ClCompile Include="wall.cpp" />
   </ItemGroup>
@@ -139,6 +140,7 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="rock.h" />
+    <ClInclude Include="sound_manager.h" />
     <ClInclude Include="wall.h" />
     <ClInclude Include="ent.h" />
     <ClInclude Include="game.h" />

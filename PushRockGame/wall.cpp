@@ -17,3 +17,7 @@ void Wall::draw() {
 	}
 	glPopMatrix();
 }
+
+const float* Wall::getColor() {
+	return COLOR;
+}

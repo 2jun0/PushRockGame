@@ -113,7 +113,7 @@ void init() {
 	// 은면제거
 	glEnable(GL_DEPTH_TEST);
 
-	popupMenuInit();
+	popupMenuInit(); 
 	callbackInit();
 	lightInit();
 }
